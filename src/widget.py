@@ -32,6 +32,28 @@ def mask_account_card(initial_str: str) -> str:
         raise ValueError("Проблема с номером карты/счёта")
 
 
+def get_date(date_str: str) -> str:
+    """
+    Принимает: "2024-03-11T02:26:18.671407"
+    Возвращает: "11.03.2024" (ДД.ММ.ГГГГ)
+    """
+    year_str = month_str = day_str = None
+
+    if date_str[0:4].isdigit():
+        year_str = date_str[0:4]
+
+    if date_str[5:7].isdigit() and 1 <= int(date_str[5:7]) <= 12:
+        month_str = date_str[5:7]
+
+    if date_str[8:10].isdigit() and 1 <= int(date_str[8:10]) <= 31:
+        day_str = date_str[8:10]
+
+    if year_str and month_str and day_str:
+        return f"{day_str}.{month_str}.{year_str}"
+    else:
+        raise ValueError("Некорректный формат даты/времени")
+
+
 assert mask_account_card("Maestro 1596837868705199") == "Maestro 1596 83** **** 5199"
 assert mask_account_card("Maestro 1596 8378 6870 5199") == "Maestro 1596 83** **** 5199"
 assert mask_account_card("Счет 64686473678894779589") == "Счет **9589"
@@ -41,3 +63,6 @@ assert mask_account_card("Visa Classic 6831982476737658") == "Visa Classic 6831 
 assert mask_account_card("Visa Platinum 8990922113665229") == "Visa Platinum 8990 92** **** 5229"
 assert mask_account_card("Visa Gold 5999414228426353") == "Visa Gold 5999 41** **** 6353"
 assert mask_account_card("Счет 73654108430135874305") == "Счет **4305"
+
+
+assert get_date("2024-03-11T02:26:18.671407") == "11.03.2024"
