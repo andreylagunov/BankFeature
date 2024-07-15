@@ -11,6 +11,8 @@
 1. PyCharm IDE (или другая)
 2. poetry
 3. git
+4. pytest
+5. pytest-cov
 
 
 ## Для тестирования функций:
@@ -24,6 +26,18 @@ git clone git@github.com:andreylagunov/BankFeature.git
 
 ```
 poetry install 
+```
+
+3. Для запуска тестирования инструментом pytest:
+
+```
+pytest
+```
+
+4. Для формирования отчёта о покрытии тестами инструментом pytest-cov:
+
+```
+pytest --cov=src --cov-report=html
 ```
 
 
