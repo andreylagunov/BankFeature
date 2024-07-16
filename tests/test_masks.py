@@ -1,13 +1,12 @@
-from src.masks import get_mask_card_number
-from src.masks import get_mask_account
-from pytest import raises
-from pytest import mark
+from pytest import mark, raises
+
+from src.masks import get_mask_account, get_mask_card_number
 
 
-@mark.parametrize("card_number_input, card_number_output", [
-                  ("7000792289606361", "7000 79** **** 6361"),
-                  ("8888000011112222", "8888 00** **** 2222")
-])
+@mark.parametrize(
+    "card_number_input, card_number_output",
+    [("7000792289606361", "7000 79** **** 6361"), ("8888000011112222", "8888 00** **** 2222")],
+)
 def test_get_mask_card_number_normal(card_number_input, card_number_output):
     assert get_mask_card_number(card_number_input) == card_number_output
 
@@ -26,10 +25,10 @@ def test_get_mask_card_number():
         assert exception_info.value == "Номер карты должен быть строкой."
 
 
-@mark.parametrize("account_number_input, account_number_output", [
-                  ("73654108430135874305", "**4305"),
-                  ("73654108430135879999", "**9999")
-])
+@mark.parametrize(
+    "account_number_input, account_number_output",
+    [("73654108430135874305", "**4305"), ("73654108430135879999", "**9999")],
+)
 def test_get_mask_account_normal(account_number_input, account_number_output):
     assert get_mask_account(account_number_input) == account_number_output
 

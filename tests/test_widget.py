@@ -1,18 +1,20 @@
-from src.widget import mask_account_card
-from src.widget import get_date
-from pytest import raises
-from pytest import mark
+from pytest import mark, raises
+
+from src.widget import get_date, mask_account_card
 
 
-@mark.parametrize("number_input, number_output", [
-                  ("Maestro 1596837868705199", "Maestro 1596 83** **** 5199"),
-                  ("Maestro 1596 8378 6870 5199", "Maestro 1596 83** **** 5199"),
-                  ("Счет 64686473678894779589", "Счет **9589"),
-                  ("MasterCard 7158300734726758", "MasterCard 7158 30** **** 6758"),
-                  ("Visa Classic 6831982476737658", "Visa Classic 6831 98** **** 7658"),
-                  ("Visa Platinum 8990922113665229", "Visa Platinum 8990 92** **** 5229"),
-                  ("Visa Gold 5999414228426353", "Visa Gold 5999 41** **** 6353"),
-])
+@mark.parametrize(
+    "number_input, number_output",
+    [
+        ("Maestro 1596837868705199", "Maestro 1596 83** **** 5199"),
+        ("Maestro 1596 8378 6870 5199", "Maestro 1596 83** **** 5199"),
+        ("Счет 64686473678894779589", "Счет **9589"),
+        ("MasterCard 7158300734726758", "MasterCard 7158 30** **** 6758"),
+        ("Visa Classic 6831982476737658", "Visa Classic 6831 98** **** 7658"),
+        ("Visa Platinum 8990922113665229", "Visa Platinum 8990 92** **** 5229"),
+        ("Visa Gold 5999414228426353", "Visa Gold 5999 41** **** 6353"),
+    ],
+)
 def test_mask_account_card_normal(number_input, number_output):
     assert mask_account_card(number_input) == number_output
 
@@ -49,14 +51,20 @@ def test_mask_account_card():
 
     with raises(TypeError) as exception_info:
         assert mask_account_card(5)
-        assert exception_info.value == "Приняты данные не типа str. Ожидается строка вида: Visa Platinum 7000 7922 8960 6361"
+        assert (
+            exception_info.value
+            == "Приняты данные не типа str. Ожидается строка вида: Visa Platinum 7000 7922 8960 6361"
+        )
 
 
-@mark.parametrize("date_input, date_output", [
-                  ("2024-03-11T02:26:18.671407", "11.03.2024"),
-                  ("2025-03-11T02:26:18.671407", "11.03.2025"),
-                  ("2024-04-11T02:26:18.671407", "11.04.2024"),
-])
+@mark.parametrize(
+    "date_input, date_output",
+    [
+        ("2024-03-11T02:26:18.671407", "11.03.2024"),
+        ("2025-03-11T02:26:18.671407", "11.03.2025"),
+        ("2024-04-11T02:26:18.671407", "11.04.2024"),
+    ],
+)
 def test_get_date_normal(date_input, date_output):
     assert get_date(date_input) == date_output
 
