@@ -22,39 +22,39 @@ def test_mask_account_card_normal(number_input, number_output):
 def test_mask_account_card():
     with raises(ValueError) as exception_info:
         # В номере карты присутствует символ f
-        assert mask_account_card("Maestro 15968378687051f")
-        assert exception_info.value == "Проблема с номером карты/счёта."
+        mask_account_card("Maestro 15968378687051f")
+    assert str(exception_info.value) == "Проблема с номером карты/счёта."
 
     with raises(ValueError) as exception_info:
-        assert mask_account_card("Счет 3538303347444795560")
-        assert exception_info.value == "Проблема с номером карты/счёта."
+        mask_account_card("Счет 3538303347444795560")
+    assert str(exception_info.value) == "Проблема с номером карты/счёта."
 
     with raises(ValueError) as exception_info:
-        assert mask_account_card("Сч 3538303347444795560")
-        assert exception_info.value == "Проблема в названии счёта или номера карты. Ожидаются:   Счёт, Visa..."
+        mask_account_card("Сч 3538303347444795560")
+    assert str(exception_info.value) == "Проблема в названии счёта или номера карты. Ожидаются:   Счёт, Visa..."
 
     with raises(ValueError) as exception_info:
-        assert mask_account_card("3538303347444795560")
-        assert exception_info.value == "Проблема в названии счёта или номера карты. Ожидаются:   Счёт, Visa..."
+        mask_account_card("3538303347444795560")
+    assert str(exception_info.value) == "Проблема в названии счёта или номера карты. Ожидаются:   Счёт, Visa..."
 
     with raises(ValueError) as exception_info:
-        assert mask_account_card("Maetro 15968378687051")
-        assert exception_info.value == "Проблема в названии счёта или номера карты. Ожидаются:   Счёт, Visa..."
+        mask_account_card("Maetro 15968378687051")
+    assert str(exception_info.value) == "Проблема в названии счёта или номера карты. Ожидаются:   Счёт, Visa..."
 
     with raises(ValueError) as exception_info:
-        assert mask_account_card("card 15968378687051")
-        assert exception_info.value == "Проблема в названии счёта или номера карты. Ожидаются:   Счёт, Visa..."
+        mask_account_card("card 15968378687051")
+    assert str(exception_info.value) == "Проблема в названии счёта или номера карты. Ожидаются:   Счёт, Visa..."
 
     with raises(ValueError) as exception_info:
-        assert mask_account_card("")
-        assert exception_info.value == "Проблема в названии счёта или номера карты. Ожидаются:   Счёт, Visa..."
+        mask_account_card("")
+    assert str(exception_info.value) == "Проблема в названии счёта или номера карты. Ожидаются:   Счёт, Visa..."
 
     with raises(TypeError) as exception_info:
-        assert mask_account_card(5)
-        assert (
-            exception_info.value
-            == "Приняты данные не типа str. Ожидается строка вида: Visa Platinum 7000 7922 8960 6361"
-        )
+        mask_account_card(5)
+    assert (
+        str(exception_info.value)
+        == "Приняты данные не типа str. Ожидается строка вида: Visa Platinum 7000 7922 8960 6361"
+    )
 
 
 @mark.parametrize(
@@ -71,24 +71,29 @@ def test_get_date_normal(date_input, date_output):
 
 def test_get_date():
     with raises(TypeError) as exception_info:
-        assert get_date(5)
-        assert exception_info.value == "Формат данных даты должен быть типа str."
+        get_date(5)
+    assert str(exception_info.value) == "Формат данных даты должен быть типа str."
 
     with raises(ValueError) as exception_info:
-        assert get_date("")
-        assert exception_info.value == "Некорректный формат даты/времени."
+        get_date("")
+    assert str(exception_info.value) == "Формат строки даты не соответствует шаблону dddd-dd-ddTdd:dd:dd.dddddd"
 
     with raises(ValueError) as exception_info:
         # Передаётся "сороковой" месяц
-        assert get_date("2024-40-11T02:26:18.671407")
-        assert exception_info.value == "Некорректный формат даты/времени."
+        get_date("2024-40-11T02:26:18.671407")
+    assert str(exception_info.value) == "Что-то не так с датой (месяцем)."
 
     with raises(ValueError) as exception_info:
         # Передаётся "восьмидесятый" день
-        assert get_date("2024-03-80T02:26:18.671407")
-        assert exception_info.value == "Некорректный формат даты/времени."
+        get_date("2024-03-80T02:26:18.671407")
+    assert str(exception_info.value) == "Что-то не так с датой (днём)."
+
+    with raises(ValueError) as exception_info:
+        # Передаётся 7099 год
+        get_date("7099-03-11T02:26:18.671407")
+    assert str(exception_info.value) == "Что-то не так с датой (тысячелетие не 2000)."
 
     with raises(ValueError) as exception_info:
         # Передаётся "сотый" день
-        assert get_date("2024-03-100T02:26:18.671407")
-        assert exception_info.value == "Формат строки даты не соответствует шаблону dddd-dd-ddTdd:dd:dd.dddddd"
+        get_date("2024-03-100T02:26:18.671407")
+    assert str(exception_info.value) == "Формат строки даты не соответствует шаблону dddd-dd-ddTdd:dd:dd.dddddd"

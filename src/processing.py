@@ -6,13 +6,15 @@ def filter_by_state(initial_lst: list[dict], state: str = "EXECUTED") -> list[di
     Принимает список словарей
     Возвращает список словарей, фильтрованный по state
     """
+    if type(initial_lst) is not list or type(state) is not str:
+        raise TypeError("Входные аргументы: не соответствующий тип одного или нескольких.")
+
     if len(initial_lst) < 1:
         raise ValueError("В функцию фильтрации передан пустой список.")
 
-    if type(initial_lst) is not list or type(initial_lst[0]) is not dict or type(state) is not str:
-        raise TypeError("Входные аргументы: не соответствующий тип одного или нескольких.")
-
     for dict_ in initial_lst:
+        if type(dict_) is not dict:
+            raise TypeError("Элемент списка не словарь.")
         if "state" not in dict_:
             raise ValueError("В одном или нескольких словарях (списка) отсутствует ключ 'state'.")
 

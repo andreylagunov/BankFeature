@@ -13,16 +13,16 @@ def test_get_mask_card_number_normal(card_number_input, card_number_output):
 
 def test_get_mask_card_number():
     with raises(ValueError) as exception_info:
-        assert get_mask_card_number("7000 7922 8960 6361")
-        assert exception_info.value == "Некорректный номер карты. Должен быть строкой из 16 цифр."
+        get_mask_card_number("7000 7922 8960 6361")
+    assert str(exception_info.value) == "Некорректный номер карты. Должен быть строкой из 16 цифр."
 
     with raises(ValueError) as exception_info:
-        assert get_mask_card_number("")
-        assert exception_info.value == "Некорректный номер карты. Должен быть строкой из 16 цифр."
+        get_mask_card_number("")
+    assert str(exception_info.value) == "Некорректный номер карты. Должен быть строкой из 16 цифр."
 
     with raises(TypeError) as exception_info:
-        assert get_mask_card_number(40)
-        assert exception_info.value == "Номер карты должен быть строкой."
+        get_mask_card_number(40)
+    assert str(exception_info.value) == "Номер карты должен быть строкой."
 
 
 @mark.parametrize(
@@ -35,13 +35,13 @@ def test_get_mask_account_normal(account_number_input, account_number_output):
 
 def test_get_mask_account():
     with raises(ValueError) as exception_info:
-        assert get_mask_account("asbb ")
-        assert exception_info.value == "Некорректный номер счёта. Должен быть строкой из 20 цифр."
+        get_mask_account("asbb ")
+    assert str(exception_info.value) == "Некорректный номер счёта. Должен быть строкой из 20 цифр."
 
     with raises(ValueError) as exception_info:
-        assert get_mask_account("")
-        assert exception_info.value == "Некорректный номер счёта. Должен быть строкой из 20 цифр."
+        get_mask_account("")
+    assert str(exception_info.value) == "Некорректный номер счёта. Должен быть строкой из 20 цифр."
 
     with raises(TypeError) as exception_info:
-        assert get_mask_account(40)
-        assert exception_info.value == "Номер счёта должен быть строкой."
+        get_mask_account(40)
+    assert str(exception_info.value) == "Номер счёта должен быть строкой."

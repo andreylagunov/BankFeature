@@ -64,16 +64,19 @@ def get_date(date_str: str) -> str:
 
     year_str = month_str = day_str = None
 
-    if date_str[0:4].isdigit():
+    if date_str[0] == "2":
         year_str = date_str[0:4]
-
-    if date_str[5:7].isdigit() and 1 <= int(date_str[5:7]) <= 12:
-        month_str = date_str[5:7]
-
-    if date_str[8:10].isdigit() and 1 <= int(date_str[8:10]) <= 31:
-        day_str = date_str[8:10]
-
-    if year_str and month_str and day_str:
-        return f"{day_str}.{month_str}.{year_str}"
     else:
-        raise ValueError("Некорректный формат даты/времени.")
+        raise ValueError("Что-то не так с датой (тысячелетие не 2000).")
+
+    if 1 <= int(date_str[5:7]) <= 12:
+        month_str = date_str[5:7]
+    else:
+        raise ValueError("Что-то не так с датой (месяцем).")
+
+    if 1 <= int(date_str[8:10]) <= 31:
+        day_str = date_str[8:10]
+    else:
+        raise ValueError("Что-то не так с датой (днём).")
+
+    return f"{day_str}.{month_str}.{year_str}"
