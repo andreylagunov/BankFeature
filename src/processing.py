@@ -6,6 +6,21 @@ def filter_by_state(initial_lst: list[dict], state: str = "EXECUTED") -> list[di
     Принимает список словарей
     Возвращает список словарей, фильтрованный по state
     """
+    if type(initial_lst) is not list or type(state) is not str:
+        raise TypeError("Входные аргументы: не соответствующий тип одного или нескольких.")
+
+    if len(initial_lst) < 1:
+        raise ValueError("В функцию фильтрации передан пустой список.")
+
+    for dict_ in initial_lst:
+        if type(dict_) is not dict:
+            raise TypeError("Элемент списка не словарь.")
+        if "state" not in dict_:
+            raise ValueError("В одном или нескольких словарях (списка) отсутствует ключ 'state'.")
+
+    if state not in ("EXECUTED", "CANCELED"):
+        raise ValueError("Аргумент 'state' должен быть значениями: 'EXECUTED' / 'CANCELED'.")
+
     return [dict_ for dict_ in initial_lst if dict_["state"] == state]
 
 
@@ -22,6 +37,19 @@ def sort_by_date(initial_lst: list[dict], is_sorting_down: bool = True) -> list[
     Принимает список словарей и необязательный параметр, задающий порядок сортировки.
     Возвращает новый список, отсортированный по дате (по умолчанию — убывание).
     """
+    if type(initial_lst) is not list or type(is_sorting_down) is not bool:
+        raise TypeError("Один или несколько аргументов имеют несоответствующий тип.")
+
+    if len(initial_lst) < 1:
+        raise ValueError("Список словарей под сортировку пуст.")
+
+    for dict_ in initial_lst:
+        if type(dict_) is not dict:
+            raise TypeError("Элемент списка - не словарь.")
+        if "date" not in dict_:
+            raise ValueError("В одном или нескольких словарях нет ключа 'date'.")
+        if type(dict_["date"]) is not str:
+            raise TypeError("Тип данных по ключу 'date' - не str.")
 
     def get_float_date(string: str) -> float:
         """
