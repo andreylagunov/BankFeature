@@ -1,0 +1,1 @@
+func error: Ошибка значения, Inputs: args=(9.9, 'ABC'), kwargs={'name': 'Tommy'}
