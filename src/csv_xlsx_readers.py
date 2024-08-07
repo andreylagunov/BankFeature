@@ -1,8 +1,8 @@
 import csv
-
-# import pandas
 import os
 from typing import Any, Dict, List
+
+import pandas as pd
 
 
 def get_transactions_dicts_from_csv(file_path: str) -> List[Dict[Any, Any]]:
@@ -24,3 +24,32 @@ def get_transactions_dicts_from_csv(file_path: str) -> List[Dict[Any, Any]]:
 
 
 # get_transactions_dicts_from_csv("../data/transactions.csv")
+
+
+def get_transactions_dicts_from_excel(file_path: str) -> List[Dict[Any, Any]]:
+    """
+    Принимает путь к файлу Excel (.xlsx),
+    Возвращает список словарей с транзакциями.
+    """
+    # Если файл не существует:
+    if not os.path.exists(file_path):
+        return []
+
+    try:
+        excel_data = pd.read_excel(file_path)
+
+        list_ = []
+        colums_names_list = excel_data.columns.tolist()
+        for index, row in excel_data.iterrows():
+            list_.append({col_name: row[i] for i, col_name in enumerate(colums_names_list)})
+        return list_
+
+    except Exception:
+        return []
+
+
+# lst = get_transactions_dicts_from_excel("../data/transactions_excel.xlsx")
+# print(type(lst))
+# print(type(lst[0]), type(lst[-1]))
+# for i in range(5):
+#     print(lst[i])
