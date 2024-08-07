@@ -188,6 +188,23 @@ get_transaction_amount_in_rub()
 ```
 
 
+### Модуль **csv_xlsx_readers.py**
+
+```
+get_transactions_dicts_from_csv()
+    """
+    Принимает путь к файлу csv,
+    Возвращает список словарей с транзакциями.
+    """
+    
+get_transactions_dicts_from_excel()
+    """
+    Принимает путь к файлу Excel (.xlsx),
+    Возвращает список словарей с транзакциями.
+    """
+```
+
+
 ## Лицензия:
 
 Проект распространяется под [лицензией MIT](LICENSE).
