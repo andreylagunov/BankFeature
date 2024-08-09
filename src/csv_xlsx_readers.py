@@ -23,7 +23,8 @@ def get_transactions_dicts_from_csv(file_path: str) -> List[Dict[Any, Any]]:
         return []
 
 
-# get_transactions_dicts_from_csv("../data/transactions.csv")
+# list_ = get_transactions_dicts_from_csv("../data/transactions.csv")
+# print(list_[0]["amount"])
 
 
 def get_transactions_dicts_from_excel(file_path: str) -> List[Dict[Any, Any]]:
