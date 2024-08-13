@@ -62,7 +62,7 @@ def main() -> None:
                 temp_trans_list = get_transactions_dicts_from_excel(file_path)
 
             filt_list = filter_by_state(temp_trans_list, user_input)
-            # тесты
+            # тесты...
             #             print(f"Операции отфильтрованы по статусу '{user_input}'.")
             #             for dict_ in filt_list:
             #                 print(dict_)
