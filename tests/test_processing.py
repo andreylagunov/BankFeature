@@ -1,6 +1,8 @@
 from pytest import raises
 
 from src.processing import filter_by_state, sort_by_date
+from src.processing import transactions_filtered_by_description
+from src.processing import get_dict_with_counted_categories
 
 
 def test_filter_by_state(get_check_list):
@@ -37,7 +39,7 @@ def test_filter_by_state(get_check_list):
     with raises(ValueError) as exception_info:
         # Передаём аргумент state, отличный от 'EXECUTED' / 'CANCELED'
         filter_by_state(get_check_list, state="3")
-    assert str(exception_info.value) == "Аргумент 'state' должен быть значениями: 'EXECUTED' / 'CANCELED'."
+    assert str(exception_info.value) == "Аргумент 'state' должен быть значениями: 'EXECUTED' / 'CANCELED' / 'PENDING'."
 
 
 def test_filter_by_state_without_key(get_fault_list):
@@ -95,3 +97,59 @@ def test_sort_by_date_with_faulty_date(get_dicts_list_with_faulty_date):
         # Передаём словари, в которых по ключу "date" не тип str
         sort_by_date(get_dicts_list_with_faulty_date)
     assert str(exception_info.value) == "Тип данных по ключу 'date' - не str."
+
+
+def test_transactions_filtered_by_description():
+    test_list = [
+        {"id": "1", "description": "Перевод с карты на карту"},
+        {"id": "1", "description": "Перевод со счета на счет"},
+        {"id": "1", "description": "Перевод с карты на счет"},
+        {"id": "1", "description": "Перевод с карты на счёт"},
+        {"id": "1", "description": "Перевод с карты на счЁт"},
+        {"id": "1", "description": ""},
+        {"id": "1", "description": 1},
+        {"id": "1"},
+        {},
+        [],
+        2,
+    ]
+    assert transactions_filtered_by_description(test_list, "счет") == [
+        {"id": "1", "description": "Перевод со счета на счет"},
+        {"id": "1", "description": "Перевод с карты на счет"},
+        {"id": "1", "description": "Перевод с карты на счёт"},
+        {"id": "1", "description": "Перевод с карты на счЁт"},
+    ]
+    assert transactions_filtered_by_description(test_list, "на карту") == [
+        {"id": "1", "description": "Перевод с карты на карту"},
+    ]
+    assert transactions_filtered_by_description([], "на карту") == []
+    assert transactions_filtered_by_description([], 4.4) == []
+    assert transactions_filtered_by_description(test_list, "") == []
+    assert transactions_filtered_by_description(test_list, 3) == []
+
+
+def test_get_dict_with_counted_categories():
+    categories_1 = ["Перевод с карты на карту", "Перевод со счета на счет", "Перевод организации", "Перевод с карты на счет"]
+    categories_2 = ["Открытие вклада", "Перевод организации"]
+    test_list = [
+        {"id": "1", "description": "Перевод со счета на счет"},
+        {"id": "2", "description": "Перевод со счета на счет"},
+        {"id": "3", "description": "Перевод с карты на карту"},
+        {"id": "4", "description": "Перевод с карты на карту"},
+        {"id": "5", "description": "Перевод организации"},
+        {"id": "6", "description": ""},
+        {"id": "7", "description": 1},
+        {"id": "8"},
+        {},
+        [],
+        2,
+    ]
+    assert get_dict_with_counted_categories(test_list, categories_1) == {
+        "Перевод со счета на счет": 2,
+        "Перевод с карты на карту": 2,
+        "Перевод организации": 1
+    }
+
+    assert get_dict_with_counted_categories(test_list, categories_2) == {
+        "Перевод организации": 1
+    }

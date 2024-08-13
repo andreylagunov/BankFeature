@@ -97,15 +97,31 @@ def filter_by_currency(transactions_list: list[dict], currency: str) -> Generato
     if len(transactions_list) < 1:
         raise ValueError("Список транзакций пуст.")
 
-    for trans in transactions_list:
-        if type(trans) is not dict:
-            raise TypeError("В списке транзакции обнаружен элемент - не словарь.")
 
-        if trans["operationAmount"]["currency"]["code"] == currency:
-            yield trans
+    # # Вариант, когда ключ currency_code есть в словаре-транзакции (файлы csv, xlsx)
+    if "currency_code" in transactions_list[0]:
+        for trans in transactions_list:
+            if type(trans) is not dict:
+                raise TypeError("В списке транзакции обнаружен элемент - не словарь.")
+            if len(trans) == 0:
+                continue
+            if trans["currency_code"] == currency:
+                yield trans
+    #
+    # # Вариант, когда ключ currency вложен в
+    # 'operationAmount': {'amount': '97853.86', 'currency': {'name': 'руб.', 'code': 'RUB'}}
+    # (файлы json)
+    elif "currency" in transactions_list[0]["operationAmount"]:
+        for trans in transactions_list:
+            if type(trans) is not dict:
+                raise TypeError("В списке транзакции обнаружен элемент - не словарь.")
+            if len(trans) == 0:
+                continue
+            if trans["operationAmount"]["currency"]["code"] == currency:
+                yield trans
 
 
-# gen_func = filter_by_currency(transactions, "RUBL")
+# gen_func = filter_by_currency(transactions, "RUB")
 # for dict_ in gen_func:
 #     print(dict_)
 

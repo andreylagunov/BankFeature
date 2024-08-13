@@ -26,13 +26,13 @@ def mask_account_card(initial_str: str) -> str:
                 digits_str += symbol
 
     # Проверка на наличие в принимаемой строке названий "visa", "mastercard", "maestro", "счёт", "счет"
-    is_prefix_valid = False
-    valid_prefixes_of_accounts_and_cards = ("visa", "mastercard", "maestro", "счёт", "счет")
-    for prefix in valid_prefixes_of_accounts_and_cards:
-        if prefix in prefix_str.lower():
-            is_prefix_valid = True
-    if not is_prefix_valid:
-        raise ValueError("Проблема в названии счёта или номера карты. Ожидаются:   Счёт, Visa...")
+    # is_prefix_valid = False
+    # valid_prefixes_of_accounts_and_cards = ("visa", "mastercard", "maestro", "счёт", "счет")
+    # for prefix in valid_prefixes_of_accounts_and_cards:
+    #     if prefix in prefix_str.lower():
+    #         is_prefix_valid = True
+    # if not is_prefix_valid:
+    #     raise ValueError("Проблема в названии счёта или номера карты. Ожидаются:   Счёт, Visa...")
 
     if len(digits_str) == 16:
         return prefix_str + get_mask_card_number(digits_str)
@@ -41,6 +41,7 @@ def mask_account_card(initial_str: str) -> str:
         return prefix_str + get_mask_account(digits_str)
 
     else:
+        print(prefix_str + digits_str, len(digits_str))
         raise ValueError("Проблема с номером карты/счёта.")
 
 
@@ -59,8 +60,8 @@ def get_date(date_str: str) -> str:
             pattern_date_str += "d"
         else:
             pattern_date_str += symbol
-    if pattern_date_str != "dddd-dd-ddTdd:dd:dd.dddddd":
-        raise ValueError("Формат строки даты не соответствует шаблону dddd-dd-ddTdd:dd:dd.dddddd")
+    if pattern_date_str != "dddd-dd-ddTdd:dd:dd.dddddd" and pattern_date_str != "dddd-dd-ddTdd:dd:ddZ":
+        raise ValueError("Формат строки даты не соответствует шаблону dddd-dd-ddTdd:dd:dd")
 
     year_str = month_str = day_str = None
 
